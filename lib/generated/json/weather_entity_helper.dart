@@ -32,6 +32,11 @@ weatherEntityFromJson(WeatherEntity data, Map<String, dynamic> json) {
 	if (json['sys'] != null) {
 		data.sys = WeatherSys().fromJson(json['sys']);
 	}
+	if (json['timezone'] != null) {
+		data.timezone = json['timezone'] is String
+				? int.tryParse(json['timezone'])
+				: json['timezone'].toInt();
+	}
 	if (json['id'] != null) {
 		data.id = json['id'] is String
 				? int.tryParse(json['id'])
@@ -59,6 +64,7 @@ Map<String, dynamic> weatherEntityToJson(WeatherEntity entity) {
 	data['clouds'] = entity.clouds.toJson();
 	data['dt'] = entity.dt;
 	data['sys'] = entity.sys.toJson();
+	data['timezone'] = entity.timezone;
 	data['id'] = entity.id;
 	data['name'] = entity.name;
 	data['cod'] = entity.cod;
@@ -119,15 +125,10 @@ weatherMainFromJson(WeatherMain data, Map<String, dynamic> json) {
 				? double.tryParse(json['temp'])
 				: json['temp'].toDouble();
 	}
-	if (json['pressure'] != null) {
-		data.pressure = json['pressure'] is String
-				? int.tryParse(json['pressure'])
-				: json['pressure'].toInt();
-	}
-	if (json['humidity'] != null) {
-		data.humidity = json['humidity'] is String
-				? int.tryParse(json['humidity'])
-				: json['humidity'].toInt();
+	if (json['feels_like'] != null) {
+		data.feelsLike = json['feels_like'] is String
+				? double.tryParse(json['feels_like'])
+				: json['feels_like'].toDouble();
 	}
 	if (json['temp_min'] != null) {
 		data.tempMin = json['temp_min'] is String
@@ -139,16 +140,27 @@ weatherMainFromJson(WeatherMain data, Map<String, dynamic> json) {
 				? double.tryParse(json['temp_max'])
 				: json['temp_max'].toDouble();
 	}
+	if (json['pressure'] != null) {
+		data.pressure = json['pressure'] is String
+				? int.tryParse(json['pressure'])
+				: json['pressure'].toInt();
+	}
+	if (json['humidity'] != null) {
+		data.humidity = json['humidity'] is String
+				? int.tryParse(json['humidity'])
+				: json['humidity'].toInt();
+	}
 	return data;
 }
 
 Map<String, dynamic> weatherMainToJson(WeatherMain entity) {
 	final Map<String, dynamic> data = new Map<String, dynamic>();
 	data['temp'] = entity.temp;
-	data['pressure'] = entity.pressure;
-	data['humidity'] = entity.humidity;
+	data['feels_like'] = entity.feelsLike;
 	data['temp_min'] = entity.tempMin;
 	data['temp_max'] = entity.tempMax;
+	data['pressure'] = entity.pressure;
+	data['humidity'] = entity.humidity;
 	return data;
 }
 
@@ -199,11 +211,6 @@ weatherSysFromJson(WeatherSys data, Map<String, dynamic> json) {
 				? int.tryParse(json['id'])
 				: json['id'].toInt();
 	}
-	if (json['message'] != null) {
-		data.message = json['message'] is String
-				? double.tryParse(json['message'])
-				: json['message'].toDouble();
-	}
 	if (json['country'] != null) {
 		data.country = json['country'].toString();
 	}
@@ -224,7 +231,6 @@ Map<String, dynamic> weatherSysToJson(WeatherSys entity) {
 	final Map<String, dynamic> data = new Map<String, dynamic>();
 	data['type'] = entity.type;
 	data['id'] = entity.id;
-	data['message'] = entity.message;
 	data['country'] = entity.country;
 	data['sunrise'] = entity.sunrise;
 	data['sunset'] = entity.sunset;

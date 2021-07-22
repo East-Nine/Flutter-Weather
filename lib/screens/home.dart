@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:weather/api/weather_entity.dart';
 import 'package:weather/data/weather_vo.dart';
+import 'package:weather/generated/json/base/json_convert_content.dart';
 import 'package:weather/util/Util.dart';
 import 'package:http/http.dart' as http;
 
@@ -43,7 +44,10 @@ class _Home extends State<Home> {
     body: Center(
       child: Column(
         children: [
-          Image.network(weather?.icon ?? "")
+          FadeInImage.assetNetwork(
+            image: weather?.icon ?? "",
+            placeholder: "assets/images/bad.png",
+          )
         ],
       )
       ),
@@ -53,9 +57,9 @@ class _Home extends State<Home> {
     var url = Uri.parse('https://api.openweathermap.org/data/2.5/weather?q=London&appid=637f5d9e5f418aa11b95f7e7f18f8de3');
     final response = await http.get(url);
 
-    if (response.request == 200) {
+    if (response.statusCode == 200) {
       setState(() {
-        WeatherEntity weatherEntity = WeatherEntity.fromJson(json.decode(response.body));
+        WeatherEntity weatherEntity = WeatherEntity().fromJson(json.decode(response.body));
         weather = WeatherVo.entityToVo(weatherEntity);
       });
     }
