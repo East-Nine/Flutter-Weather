@@ -22,11 +22,11 @@ class WeatherVo {
 			icon = "http://openweathermap.org/img/wn/${entity.weather.first.icon}.png";
 		}
 
-		DateTime now = DateTime.now();
+		DateTime now = DateTime.now().toLocal();
 
 		return WeatherVo(
 			icon: icon,
-			temp: entity.main.temp - 273.15,
+			temp: (entity.main.temp - 273.15),
 			week: DateFormat('EEEE').format(now),
 			date: DateFormat('dd MMMM, yyyy').format(now),
 			time: DateFormat('hh:mm a').format(now),
